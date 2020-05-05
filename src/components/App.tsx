@@ -22,6 +22,8 @@ import ShowChart from '@material-ui/icons/ShowChart';
 import AddBox from '@material-ui/icons/AddBox';
 import LocalShipping from '@material-ui/icons/LocalShipping';
 
+import Drugs from './Drugs';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -83,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function App() {
+const App: React.FC = () => {
     const classes = useStyles();
     const location = useLocation();
     const theme = useTheme();
@@ -194,11 +196,7 @@ export default function App() {
             </main>
         </div>
     );
-}
-
-function Drugs() {
-    return <Typography paragraph>Drugs</Typography>;
-}
+};
 
 function Orders() {
     return <Typography paragraph>Orders</Typography>;
@@ -211,3 +209,5 @@ function Delivery() {
 function Analysis() {
     return <Typography paragraph>Analysis</Typography>;
 }
+
+export default App;
