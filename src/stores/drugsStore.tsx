@@ -4,7 +4,7 @@ import EventEmitter from 'events';
 import DrugRecord from '../records/DrugRecord';
 
 interface IDrugsStore {
-    drugs: DrugRecord[];
+    getData(): DrugRecord[];
     setRawData(drugs: IRawDrug[]): void;
 }
 
@@ -15,10 +15,14 @@ interface IRawDrug {
 }
 
 class DrugsStore extends EventEmitter implements IDrugsStore {
-    drugs: DrugRecord[] = [];
+    private state: DrugRecord[] = [];
+
+    getData(): DrugRecord[] {
+        return this.state;
+    }
 
     setRawData(drugs: IRawDrug[]): void {
-        this.drugs = drugs.map((drug) => new DrugRecord(
+        this.state = drugs.map((drug) => new DrugRecord(
             drug.name,
             drug.count,
             drug.price

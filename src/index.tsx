@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 
-import drugsStore from './store/drugsStore';
+import drugsStore from './stores/drugsStore';
 import App from './components/App';
 import './index.css';
 

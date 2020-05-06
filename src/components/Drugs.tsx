@@ -1,28 +1,22 @@
-import React, { useEffect, useState } from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React, { useEffect, useState, forwardRef } from 'react';
+import { Column } from 'material-table';
 
 import { ActionTypes } from '../ActionTypes';
 import DrugRecord from '../records/DrugRecord';
-import drugsStore from '../store/drugsStore';
+import drugsStore from '../stores/drugsStore';
+import DrugValidationSchema from '../validations/DrugValidationSchema';
+import Table from './Table';
+import TableEditField from './TableEditField';
+import TableEditRow from './TableEditRow';
 
-const useStyles = makeStyles({
-    table: {
-        minWidth: 500,
-    },
-});
+interface Row extends DrugRecord {}
+
+interface TableState {
+    columns: Array<Column<Row>>;
+    data: Row[];
+}
 
 const Drugs: React.FC = () => {
-    const classes = useStyles();
-    const [ drugs, setDrugs ] = useState<DrugRecord[]>(drugsStore.drugs);
-
     /*
     const handleDrugsChange = (drugs: DrugRecord[]) => {
         setDrugs(drugs);
@@ -34,29 +28,85 @@ const Drugs: React.FC = () => {
         return () => {
             drugsStore.off(ActionTypes.DRUGS_UPDATED, handleDrugsChange);
         }
-    });*/
+    });
+    */
+
+    const [state, setState] = React.useState<TableState>({
+        columns: [
+            {
+                title: 'Название',
+                field: 'name'
+            },
+            {
+                title: 'Цена',
+                field: 'price',
+                type: 'currency',
+                currencySetting: {
+                    locale: 'ru',
+                    currencyCode: 'RUB'
+                }
+            },
+            {
+                title: 'Количество',
+                field: 'count',
+                type: 'numeric'
+            }
+        ],
+        data: drugsStore.getData(),
+    });
 
     return (
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Название</TableCell>
-                        <TableCell align="right">Цена</TableCell>
-                        <TableCell align="right">Количество</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {drugs.map((drug) => (
-                        <TableRow key={drug.name}>
-                            <TableCell component="th" scope="row">{drug.name}</TableCell>
-                            <TableCell align="right">{`${drug.price} ₽`}</TableCell>
-                            <TableCell align="right">{`${drug.count} шт.`}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Table
+            title="Лекарства"
+            columns={state.columns}
+            data={state.data}
+            components={{
+                EditRow: (props: any) => (
+                    <TableEditRow
+                        {...props}
+                        validationSchema={DrugValidationSchema}
+                    />
+                ),
+                EditField: TableEditField
+            }}
+            editable={{
+                onRowAdd: (newData) =>
+                    new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve();
+                            setState((prevState) => {
+                                const data = [...prevState.data];
+                                data.push(newData);
+                                return { ...prevState, data };
+                            });
+                        }, 600);
+                    }),
+                onRowUpdate: (newData, oldData) =>
+                    new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            resolve();
+                            if (oldData) {
+                                setState((prevState) => {
+                                    const data = [...prevState.data];
+                                    data[data.indexOf(oldData)] = newData;
+                                    return { ...prevState, data };
+                                });
+                            }
+                        }, 600);
+                    }),
+                onRowDelete: (oldData) =>
+                    new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve();
+                            setState((prevState) => {
+                                const data = [...prevState.data];
+                                data.splice(data.indexOf(oldData), 1);
+                                return { ...prevState, data };
+                            });
+                        }, 600);
+                    }),
+            }}
+        />
     );
 };
 
