@@ -13,7 +13,7 @@ const knex = require('knex')({
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 900,
+        width: 1200,
         height: 680,
         webPreferences: {
             nodeIntegration: true
@@ -31,9 +31,17 @@ function createWindow() {
 app.on('ready', () => {
     createWindow();
 
-    ipcMain.on('bootstrap',  () => {
+    ipcMain.on('bootstrap',  (event) => {
         knex.select().from('drugs').then((drugs) => {
-            mainWindow.webContents.send('bootstrap-success', { drugs });
+            event.reply('bootstrap-success', { drugs });
+        });
+    });
+    ipcMain.on('drugs-table-insert', (event, data) => {
+        knex('drugs').insert(data).then(() => {
+            event.reply('drugs-table-insert-success');
+        }).catch((error) => {
+            console.log(error);
+            event.reply('drugs-table-insert-failure');
         });
     });
 });

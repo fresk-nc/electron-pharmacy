@@ -1,9 +1,10 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { Column } from 'material-table';
 
-import { ActionTypes } from '../ActionTypes';
 import DrugRecord from '../records/DrugRecord';
 import drugsStore from '../stores/drugsStore';
+import snackbarStore from '../stores/snackbarStore';
+import useStoreSubscribe from '../hooks/useStoreSubscribe';
 import DrugValidationSchema from '../validations/DrugValidationSchema';
 import Table from './Table';
 import TableEditField from './TableEditField';
@@ -17,25 +18,12 @@ interface TableState {
 }
 
 const Drugs: React.FC = () => {
-    /*
-    const handleDrugsChange = (drugs: DrugRecord[]) => {
-        setDrugs(drugs);
-    };
-
-    useEffect(() => {
-        drugsStore.on(ActionTypes.DRUGS_UPDATED, handleDrugsChange);
-
-        return () => {
-            drugsStore.off(ActionTypes.DRUGS_UPDATED, handleDrugsChange);
-        }
-    });
-    */
-
-    const [state, setState] = React.useState<TableState>({
+    const [state, setState] = useState<TableState>({
         columns: [
             {
                 title: 'Название',
-                field: 'name'
+                field: 'name',
+                initialEditValue: ''
             },
             {
                 title: 'Цена',
@@ -44,15 +32,23 @@ const Drugs: React.FC = () => {
                 currencySetting: {
                     locale: 'ru',
                     currencyCode: 'RUB'
-                }
+                },
+                initialEditValue: 0
             },
             {
                 title: 'Количество',
                 field: 'count',
-                type: 'numeric'
+                type: 'numeric',
+                initialEditValue: 0
             }
         ],
-        data: drugsStore.getData(),
+        data: drugsStore.getState()
+    });
+
+    useStoreSubscribe(drugsStore, (drugs: DrugRecord[]) => {
+        setState((prevSate) => {
+            return { ...prevSate, data: drugs };
+        });
     });
 
     return (
@@ -70,17 +66,22 @@ const Drugs: React.FC = () => {
                 EditField: TableEditField
             }}
             editable={{
-                onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return { ...prevState, data };
-                            });
-                        }, 600);
-                    }),
+                onRowAdd: (newData) => {
+                    return drugsStore.insert(
+                        new DrugRecord(newData.name, newData.count, newData.price)
+                    ).then(() => {
+                        snackbarStore.setState({
+                            text: 'Операция выполнена успешно!',
+                            type: 'success'
+                        });
+                    }).catch((error) => {
+                        snackbarStore.setState({
+                            text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                            type: 'error'
+                        });
+                        return Promise.reject(error);
+                    });
+                },
                 onRowUpdate: (newData, oldData) =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {

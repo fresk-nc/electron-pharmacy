@@ -8,7 +8,7 @@ import App from './components/App';
 import './index.css';
 
 ipcRenderer.send('bootstrap');
-ipcRenderer.on('bootstrap-success', (_, data) => {
+ipcRenderer.once('bootstrap-success', (_, data) => {
     drugsStore.setRawData(data.drugs);
 
     ReactDOM.render(
