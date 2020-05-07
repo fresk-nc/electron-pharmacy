@@ -67,45 +67,60 @@ const Drugs: React.FC = () => {
             }}
             editable={{
                 onRowAdd: (newData) => {
-                    return drugsStore.insert(
-                        new DrugRecord(newData.name, newData.count, newData.price)
-                    ).then(() => {
-                        snackbarStore.setState({
-                            text: 'Операция выполнена успешно!',
-                            type: 'success'
-                        });
-                    }).catch((error) => {
-                        snackbarStore.setState({
-                            text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                            type: 'error'
-                        });
-                        return Promise.reject(error);
-                    });
-                },
-                onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            resolve();
-                            if (oldData) {
-                                setState((prevState) => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    return { ...prevState, data };
-                                });
-                            }
-                        }, 600);
-                    }),
-                onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return { ...prevState, data };
+                    return drugsStore
+                        .insert(new DrugRecord(newData.name, newData.count, newData.price))
+                        .then(() => {
+                            snackbarStore.setState({
+                                text: 'Операция выполнена успешно!',
+                                type: 'success'
                             });
-                        }, 600);
-                    }),
+                        }).catch((error) => {
+                            snackbarStore.setState({
+                                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                                type: 'error'
+                            });
+                            return Promise.reject(error);
+                        });
+                },
+                onRowUpdate: (newData, oldData) => {
+                    if (!oldData) {
+                        return Promise.resolve();
+                    }
+
+                    return drugsStore
+                        .update(
+                            new DrugRecord(oldData.name, oldData.count, oldData.price),
+                            new DrugRecord(newData.name, newData.count, newData.price)
+                        )
+                        .then(() => {
+                            snackbarStore.setState({
+                                text: 'Операция выполнена успешно!',
+                                type: 'success'
+                            });
+                        }).catch((error) => {
+                            snackbarStore.setState({
+                                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                                type: 'error'
+                            });
+                            return Promise.reject(error);
+                        });
+                },
+                onRowDelete: (oldData) => {
+                    return drugsStore
+                        .delete(oldData.name)
+                        .then(() => {
+                            snackbarStore.setState({
+                                text: 'Операция выполнена успешно!',
+                                type: 'success'
+                            });
+                        }).catch((error) => {
+                            snackbarStore.setState({
+                                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                                type: 'error'
+                            });
+                            return Promise.reject(error);
+                        });
+                }
             }}
         />
     );

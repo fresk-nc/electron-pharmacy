@@ -32,17 +32,44 @@ app.on('ready', () => {
     createWindow();
 
     ipcMain.on('bootstrap',  (event) => {
-        knex.select().from('drugs').then((drugs) => {
-            event.reply('bootstrap-success', { drugs });
-        });
+        knex
+            .select()
+            .from('drugs')
+            .then((drugs) => {
+                event.reply('bootstrap-success', { drugs });
+            });
     });
     ipcMain.on('drugs-table-insert', (event, data) => {
-        knex('drugs').insert(data).then(() => {
-            event.reply('drugs-table-insert-success');
-        }).catch((error) => {
+        knex('drugs')
+            .insert(data)
+            .then(() => {
+                event.reply('drugs-table-insert-success');
+            }).catch((error) => {
+                console.log(error);
+                event.reply('drugs-table-insert-failure');
+            });
+    });
+    ipcMain.on('drugs-table-update', (event, { oldData, newData }) => {
+        knex('drugs')
+            .where({ name: oldData.name })
+            .update(newData)
+            .then(() => {
+                event.reply('drugs-table-update-success');
+            }).catch((error) => {
             console.log(error);
-            event.reply('drugs-table-insert-failure');
+            event.reply('drugs-table-update-failure');
         });
+    });
+    ipcMain.on('drugs-table-delete', (event, name) => {
+        knex('drugs')
+            .where({ name })
+            .del()
+            .then(() => {
+                event.reply('drugs-table-delete-success');
+            }).catch((error) => {
+                console.log(error);
+                event.reply('drugs-table-delete-failure');
+            });
     });
 });
 
