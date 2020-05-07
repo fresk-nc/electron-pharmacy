@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
+import MuiSnackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 import snackbarStore, { SnackbarState } from '../stores/snackbarStore';
@@ -9,7 +9,7 @@ function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const CustomSnackbar: React.FC = () => {
+const Snackbar: React.FC = () => {
     const [state, setState] = useState<SnackbarState>(snackbarStore.getState());
 
     useStoreSubscribe(snackbarStore, (state: SnackbarState) => {
@@ -29,12 +29,12 @@ const CustomSnackbar: React.FC = () => {
     }
 
     return (
-        <Snackbar open autoHideDuration={6000} onClose={handleClose}>
+        <MuiSnackbar open autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity={state?.type}>
                 {state?.text}
             </Alert>
-        </Snackbar>
+        </MuiSnackbar>
     );
 };
 
-export default CustomSnackbar;
+export default Snackbar;

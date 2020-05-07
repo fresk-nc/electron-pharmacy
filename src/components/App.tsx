@@ -23,7 +23,7 @@ import AddBox from '@material-ui/icons/AddBox';
 import LocalShipping from '@material-ui/icons/LocalShipping';
 
 import Drugs from './Drugs';
-import CustomSnackbar from './CustomSnackbar';
+import Snackbar from './Snackbar';
 
 const drawerWidth = 240;
 
@@ -195,7 +195,7 @@ const App: React.FC = () => {
                     </Route>
                 </Switch>
             </main>
-            <CustomSnackbar />
+            <Snackbar />
         </div>
     );
 };
