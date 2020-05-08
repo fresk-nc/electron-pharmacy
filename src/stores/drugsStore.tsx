@@ -6,7 +6,7 @@ import DrugRecord from '../records/DrugRecord';
 interface DrugsStoreInterface {
   getState(): DrugRecord[];
   getUpdateEvent(): string;
-  setRawData(drugs: IRawDrug[]): void;
+  setRawData(drugs: RawDrug[]): void;
   insert(drug: DrugRecord): Promise<DrugRecord[]>;
   update(oldDrug: DrugRecord, newDrug: DrugRecord): Promise<DrugRecord[]>;
   delete(name: string): Promise<DrugRecord[]>;
