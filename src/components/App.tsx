@@ -28,6 +28,7 @@ import AddBox from '@material-ui/icons/AddBox';
 import LocalShipping from '@material-ui/icons/LocalShipping';
 
 import Drugs from './Drugs';
+import Orders from './Orders';
 import Snackbar from './Snackbar';
 
 const drawerWidth = 240;
@@ -216,10 +217,6 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-function Orders() {
-  return <Typography paragraph>Orders</Typography>;
-}
 
 function Delivery() {
   return <Typography paragraph>Delivery</Typography>;
