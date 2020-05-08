@@ -122,6 +122,9 @@ const Drugs: React.FC = () => {
             });
         },
       }}
+      options={{
+        exportButton: true,
+      }}
     />
   );
 };
