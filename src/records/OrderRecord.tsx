@@ -6,6 +6,7 @@ interface OrderRecordInterface {
   totalPrice: number;
   status: string;
   phone: string;
+  address: string;
   drugs: OrderItemRecord[];
 }
 
@@ -15,12 +16,19 @@ class OrderRecord implements OrderRecordInterface {
   totalPrice: number;
   status: string;
   phone: string;
+  address: string;
   drugs: OrderItemRecord[];
 
   constructor(
     order: Pick<
       OrderRecord,
-      'id' | 'datetime' | 'totalPrice' | 'status' | 'drugs' | 'phone'
+      | 'id'
+      | 'datetime'
+      | 'totalPrice'
+      | 'status'
+      | 'drugs'
+      | 'phone'
+      | 'address'
     >
   ) {
     this.id = order.id;
@@ -28,6 +36,7 @@ class OrderRecord implements OrderRecordInterface {
     this.totalPrice = order.totalPrice;
     this.status = order.status;
     this.phone = order.phone;
+    this.address = order.address;
     this.drugs = order.drugs;
   }
 }

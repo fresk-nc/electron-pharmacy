@@ -38,6 +38,10 @@ const Orders: React.FC = () => {
         field: 'phone',
       },
       {
+        title: 'Адрес доставки',
+        field: 'address',
+      },
+      {
         title: 'Стоимость',
         field: 'totalPrice',
         type: 'currency',

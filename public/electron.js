@@ -21,6 +21,7 @@ function formatOrders(orders) {
         totalPrice: order.total_price,
         status: order.status,
         phone: order.phone,
+        address: order.address,
         drugs: [],
       };
       output[order.id].drugs.push({

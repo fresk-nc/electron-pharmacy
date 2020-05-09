@@ -33,6 +33,7 @@ ipcRenderer.once('bootstrap-success', (_, data) => {
           totalPrice: order.totalPrice,
           status: order.status,
           phone: order.phone,
+          address: order.address,
           drugs: order.drugs.map(
             (drug: any) =>
               new OrderItemRecord({
