@@ -1,5 +1,4 @@
-import EventEmitter from 'events';
-
+import CommonStore from './CommonStore';
 import OrderRecord from '../records/OrderRecord';
 
 interface OrdersStoreInterface {
@@ -8,7 +7,7 @@ interface OrdersStoreInterface {
   setState(orders: OrderRecord[]): void;
 }
 
-class OrdersStore extends EventEmitter implements OrdersStoreInterface {
+class OrdersStore extends CommonStore implements OrdersStoreInterface {
   private state: OrderRecord[] = [];
   private updateEvent = 'ORDERS_STORE_UPDATED';
 

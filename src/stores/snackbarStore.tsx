@@ -1,6 +1,7 @@
-import EventEmitter from 'events';
+import CommonStore from './CommonStore';
 
 type SnackbarStateType = 'success' | 'error';
+
 export type SnackbarState = {
   text: string;
   type: SnackbarStateType;
@@ -12,7 +13,7 @@ interface SnackbarStoreInterface {
   setState(state: SnackbarState): void;
 }
 
-class SnackbarStore extends EventEmitter implements SnackbarStoreInterface {
+class SnackbarStore extends CommonStore implements SnackbarStoreInterface {
   private state: SnackbarState = null;
   private updateEvent = 'SNACKBAR_STORE_UPDATED';
 

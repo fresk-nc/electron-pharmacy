@@ -1,6 +1,6 @@
-import EventEmitter from 'events';
 import {ipcRenderer} from 'electron';
 
+import CommonStore from './CommonStore';
 import DrugRecord from '../records/DrugRecord';
 
 interface DrugsStoreInterface {
@@ -12,7 +12,7 @@ interface DrugsStoreInterface {
   delete(name: string): Promise<DrugRecord[]>;
 }
 
-class DrugsStore extends EventEmitter implements DrugsStoreInterface {
+class DrugsStore extends CommonStore implements DrugsStoreInterface {
   private state: DrugRecord[] = [];
   private updateEvent = 'DRUGS_STORE_UPDATED';
 
