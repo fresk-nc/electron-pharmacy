@@ -5,9 +5,11 @@ import {ipcRenderer} from 'electron';
 
 import drugsStore from './stores/drugsStore';
 import ordersStore from './stores/ordersStore';
+import pickupPointsStore from './stores/pickupPointsStore';
 import DrugRecord from './records/DrugRecord';
 import OrderRecord from './records/OrderRecord';
 import OrderItemRecord from './records/OrderItemRecord';
+import PickupPointRecord from './records/PickupPointRecord';
 import App from './components/App';
 import './index.css';
 
@@ -44,6 +46,16 @@ ipcRenderer.once('bootstrap-success', (_, data) => {
           ),
         })
     )
+  );
+  pickupPointsStore.setState(
+    data.pickupPoints.map((pickupPoint: any) => {
+      return new PickupPointRecord({
+        name: pickupPoint.name,
+        address: pickupPoint.address,
+        workTime: pickupPoint.workTime,
+        price: pickupPoint.price,
+      });
+    })
   );
 
   ReactDOM.render(

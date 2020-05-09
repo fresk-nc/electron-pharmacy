@@ -2,6 +2,8 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const camelcaseKeys = require('camelcase-keys');
+const snakecaseKeys = require('snakecase-keys');
 
 let mainWindow;
 
@@ -18,7 +20,7 @@ function formatOrders(orders) {
       output[order.id] = output[order.id] || {
         id: order.id,
         datetime: order.datetime,
-        totalPrice: order.total_price,
+        totalPrice: order.totalPrice,
         status: order.status,
         phone: order.phone,
         address: order.address,
@@ -64,15 +66,17 @@ app.on('ready', () => {
         .select()
         .from('orders')
         .innerJoin('order_item', 'orders.id', 'order_item.order_id')
+        .then(camelcaseKeys)
         .then(formatOrders),
-      knex.select().from('drugs'),
-    ]).then(([orders, drugs]) => {
-      event.reply('bootstrap-success', {orders, drugs});
+      knex.select().from('drugs').then(camelcaseKeys),
+      knex.select().from('pickup_points').then(camelcaseKeys),
+    ]).then(([orders, drugs, pickupPoints]) => {
+      event.reply('bootstrap-success', {orders, drugs, pickupPoints});
     });
   });
   ipcMain.on('drugs-table-insert', (event, data) => {
     knex('drugs')
-      .insert(data)
+      .insert(snakecaseKeys(data))
       .then(() => {
         event.reply('drugs-table-insert-success');
       })
@@ -84,7 +88,7 @@ app.on('ready', () => {
   ipcMain.on('drugs-table-update', (event, {oldData, newData}) => {
     knex('drugs')
       .where({name: oldData.name})
-      .update(newData)
+      .update(snakecaseKeys(newData))
       .then(() => {
         event.reply('drugs-table-update-success');
       })
@@ -103,6 +107,41 @@ app.on('ready', () => {
       .catch((error) => {
         console.log(error);
         event.reply('drugs-table-delete-failure');
+      });
+  });
+  ipcMain.on('pickup_points-table-insert', (event, data) => {
+    knex('pickup_points')
+      .insert(snakecaseKeys(data))
+      .then(() => {
+        event.reply('pickup_points-table-insert-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        event.reply('pickup_points-table-insert-failure');
+      });
+  });
+  ipcMain.on('pickup_points-table-update', (event, {oldData, newData}) => {
+    knex('pickup_points')
+      .where({address: oldData.address})
+      .update(snakecaseKeys(newData))
+      .then(() => {
+        event.reply('pickup_points-table-update-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        event.reply('pickup_points-table-update-failure');
+      });
+  });
+  ipcMain.on('pickup_points-table-delete', (event, address) => {
+    knex('pickup_points')
+      .where({address})
+      .del()
+      .then(() => {
+        event.reply('pickup_points-table-delete-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        event.reply('pickup_points-table-delete-failure');
       });
   });
 });

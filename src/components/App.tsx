@@ -29,6 +29,7 @@ import LocalShipping from '@material-ui/icons/LocalShipping';
 
 import Drugs from './Drugs';
 import Orders from './Orders';
+import PickupPoints from './PickupPoints';
 import Snackbar from './Snackbar';
 
 const drawerWidth = 240;
@@ -172,13 +173,13 @@ const App: React.FC = () => {
           </ListItem>
           <ListItem
             button
-            component={(props) => <Link to="/delivery" {...props} />}
-            selected={location.pathname === '/delivery'}
+            component={(props) => <Link to="/pickup-points" {...props} />}
+            selected={location.pathname === '/pickup-points'}
           >
             <ListItemIcon>
               <LocalShipping />
             </ListItemIcon>
-            <ListItemText primary="Доставка" />
+            <ListItemText primary="Пункты доставки" />
           </ListItem>
           <ListItem
             button
@@ -205,8 +206,8 @@ const App: React.FC = () => {
           <Route path="/orders">
             <Orders />
           </Route>
-          <Route path="/delivery">
-            <Delivery />
+          <Route path="/pickup-points">
+            <PickupPoints />
           </Route>
           <Route path="/analysis">
             <Analysis />
@@ -217,10 +218,6 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-function Delivery() {
-  return <Typography paragraph>Delivery</Typography>;
-}
 
 function Analysis() {
   return <Typography paragraph>Analysis</Typography>;
