@@ -26,6 +26,11 @@ const Drugs: React.FC = () => {
         initialEditValue: '',
       },
       {
+        title: 'Описание',
+        field: 'description',
+        initialEditValue: '',
+      },
+      {
         title: 'Цена',
         field: 'price',
         type: 'currency',
@@ -65,7 +70,14 @@ const Drugs: React.FC = () => {
       editable={{
         onRowAdd: (newData) => {
           return drugsStore
-            .insert(new DrugRecord(newData.name, newData.count, newData.price))
+            .insert(
+              new DrugRecord({
+                name: newData.name,
+                description: newData.description,
+                count: newData.count,
+                price: newData.price,
+              })
+            )
             .then(() => {
               snackbarStore.setState({
                 text: 'Операция выполнена успешно!',
@@ -87,8 +99,18 @@ const Drugs: React.FC = () => {
 
           return drugsStore
             .update(
-              new DrugRecord(oldData.name, oldData.count, oldData.price),
-              new DrugRecord(newData.name, newData.count, newData.price)
+              new DrugRecord({
+                name: oldData.name,
+                description: oldData.description,
+                count: oldData.count,
+                price: oldData.price,
+              }),
+              new DrugRecord({
+                name: newData.name,
+                description: newData.description,
+                count: newData.count,
+                price: newData.price,
+              })
             )
             .then(() => {
               snackbarStore.setState({

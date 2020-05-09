@@ -7,8 +7,8 @@ export type SnackbarState = {
 } | null;
 
 interface SnackbarStoreInterface {
-  getState(): SnackbarState;
   getUpdateEvent(): string;
+  getState(): SnackbarState;
   setState(state: SnackbarState): void;
 }
 
@@ -16,12 +16,12 @@ class SnackbarStore extends EventEmitter implements SnackbarStoreInterface {
   private state: SnackbarState = null;
   private updateEvent = 'SNACKBAR_STORE_UPDATED';
 
-  getState(): SnackbarState {
-    return this.state;
-  }
-
   getUpdateEvent(): string {
     return this.updateEvent;
+  }
+
+  getState(): SnackbarState {
+    return this.state;
   }
 
   setState(state: SnackbarState): void {

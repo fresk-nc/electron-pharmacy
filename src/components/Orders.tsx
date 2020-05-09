@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Column} from 'material-table';
 
 import MuiBox from '@material-ui/core/Box';
 import MuiTypography from '@material-ui/core/Typography';
@@ -8,67 +9,60 @@ import MuiTableCell from '@material-ui/core/TableCell';
 import MuiTableHead from '@material-ui/core/TableHead';
 import MuiTableRow from '@material-ui/core/TableRow';
 
+import useStoreSubscribe from '../hooks/useStoreSubscribe';
+import ordersStore from '../stores/ordersStore';
+import OrderRecord from '../records/OrderRecord';
+
 import Table from './Table';
 
+type Row = OrderRecord;
+
+interface TableState {
+  columns: Array<Column<Row>>;
+  data: Row[];
+}
+
 const Orders: React.FC = () => {
+  const [state, setState] = useState<TableState>({
+    columns: [
+      {
+        title: '#',
+        field: 'id',
+      },
+      {
+        title: 'Дата и время',
+        field: 'datetime',
+      },
+      {
+        title: 'Номер телефона',
+        field: 'phone',
+      },
+      {
+        title: 'Стоимость',
+        field: 'totalPrice',
+        type: 'currency',
+        currencySetting: {
+          locale: 'ru',
+          currencyCode: 'RUB',
+        },
+      },
+      {
+        title: 'Статус',
+        field: 'status',
+      },
+    ],
+    data: ordersStore.getState(),
+  });
+
+  useStoreSubscribe(ordersStore, (orders: OrderRecord[]) => {
+    setState((prevSate) => {
+      return {...prevSate, data: orders};
+    });
+  });
   return (
     <Table
-      columns={[
-        {
-          title: '#',
-          field: 'number',
-        },
-        {
-          title: 'Дата и время',
-          field: 'datetime',
-        },
-        {
-          title: 'Стоимость',
-          field: 'price',
-          type: 'currency',
-          currencySetting: {
-            locale: 'ru',
-            currencyCode: 'RUB',
-          },
-        },
-        {
-          title: 'Статус',
-          field: 'status',
-        },
-      ]}
-      data={[
-        {
-          number: '001',
-          datetime: '2020-01-01 10:00',
-          price: 2000,
-          status: 'Оплачен',
-          drugs: [
-            {
-              name: 'Анальгин',
-              price: 50,
-              count: 1,
-            },
-            {
-              name: 'Гептрал',
-              price: 2050,
-              count: 1,
-            },
-          ],
-        },
-        {
-          number: '002',
-          datetime: '2020-01-01 10:00',
-          price: 3000,
-          status: 'Доставлен',
-          drugs: [
-            {
-              name: 'Гептрал',
-              price: 2050,
-              count: 1,
-            },
-          ],
-        },
-      ]}
+      columns={state.columns}
+      data={state.data}
       title="Заказы"
       detailPanel={(rowData) => {
         return (
@@ -89,7 +83,12 @@ const Orders: React.FC = () => {
                   return (
                     <MuiTableRow key={drug.name}>
                       <MuiTableCell>{drug.name}</MuiTableCell>
-                      <MuiTableCell align="right">{drug.price}</MuiTableCell>
+                      <MuiTableCell align="right">
+                        {new Intl.NumberFormat('ru', {
+                          style: 'currency',
+                          currency: 'RUB',
+                        }).format(drug.price)}
+                      </MuiTableCell>
                       <MuiTableCell align="right">{drug.count}</MuiTableCell>
                     </MuiTableRow>
                   );

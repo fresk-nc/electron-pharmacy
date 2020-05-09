@@ -4,36 +4,28 @@ import {ipcRenderer} from 'electron';
 import DrugRecord from '../records/DrugRecord';
 
 interface DrugsStoreInterface {
-  getState(): DrugRecord[];
   getUpdateEvent(): string;
-  setRawData(drugs: RawDrug[]): void;
+  getState(): DrugRecord[];
+  setState(drugs: DrugRecord[]): void;
   insert(drug: DrugRecord): Promise<DrugRecord[]>;
   update(oldDrug: DrugRecord, newDrug: DrugRecord): Promise<DrugRecord[]>;
   delete(name: string): Promise<DrugRecord[]>;
 }
 
-type RawDrug = {
-  name: string;
-  price: number;
-  count: number;
-};
-
 class DrugsStore extends EventEmitter implements DrugsStoreInterface {
   private state: DrugRecord[] = [];
   private updateEvent = 'DRUGS_STORE_UPDATED';
-
-  getState(): DrugRecord[] {
-    return this.state;
-  }
 
   getUpdateEvent(): string {
     return this.updateEvent;
   }
 
-  setRawData(drugs: RawDrug[]): void {
-    this.state = drugs.map(
-      (drug) => new DrugRecord(drug.name, drug.count, drug.price)
-    );
+  getState(): DrugRecord[] {
+    return this.state;
+  }
+
+  setState(drugs: DrugRecord[]): void {
+    this.state = drugs;
   }
 
   insert(drug: DrugRecord): Promise<DrugRecord[]> {

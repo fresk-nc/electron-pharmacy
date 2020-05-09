@@ -12,6 +12,27 @@ const knex = require('knex')({
   },
 });
 
+function formatOrders(orders) {
+  return Object.values(
+    orders.reduce((output, order) => {
+      output[order.id] = output[order.id] || {
+        id: order.id,
+        datetime: order.datetime,
+        totalPrice: order.total_price,
+        status: order.status,
+        phone: order.phone,
+        drugs: [],
+      };
+      output[order.id].drugs.push({
+        name: order.name,
+        count: order.count,
+        price: order.price,
+      });
+      return output;
+    }, {})
+  );
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -37,12 +58,16 @@ app.on('ready', () => {
   createWindow();
 
   ipcMain.on('bootstrap', (event) => {
-    knex
-      .select()
-      .from('drugs')
-      .then((drugs) => {
-        event.reply('bootstrap-success', {drugs});
-      });
+    Promise.all([
+      knex
+        .select()
+        .from('orders')
+        .innerJoin('order_item', 'orders.id', 'order_item.order_id')
+        .then(formatOrders),
+      knex.select().from('drugs'),
+    ]).then(([orders, drugs]) => {
+      event.reply('bootstrap-success', {orders, drugs});
+    });
   });
   ipcMain.on('drugs-table-insert', (event, data) => {
     knex('drugs')

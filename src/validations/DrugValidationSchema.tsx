@@ -5,6 +5,10 @@ const DrugValidationSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(140, 'Too Long!')
     .required('Required'),
+  description: Yup.string()
+    .min(2, 'Too Short!')
+    .max(400, 'Too Long!')
+    .required('Required'),
   price: Yup.number().min(0, 'Negative!').required('Required'),
   count: Yup.number().min(0, 'Negative!').required('Required'),
 });
