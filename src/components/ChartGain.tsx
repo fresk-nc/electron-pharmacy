@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import {createStyles, makeStyles} from '@material-ui/core/styles';
 
-import formatCurrency from '../utils/formatCurrency';
+import CurrencyFormatter from '../utils/CurrencyFormatter';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -44,7 +44,9 @@ const ChartGain: React.FC<ChartGainProps> = (props: ChartGainProps) => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip formatter={(value: any) => formatCurrency(value)} />
+          <Tooltip
+            formatter={(value: any) => new CurrencyFormatter(value).format()}
+          />
           <Legend />
           <Bar dataKey="value" name="Выручка" fill="#8884d8" />
         </BarChart>

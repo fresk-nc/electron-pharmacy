@@ -13,7 +13,8 @@ import {
 } from '@material-ui/pickers';
 
 import ChartGain from './ChartGain';
-import getChartGainByTimeData from '../utils/getChartGainByTimeData';
+import ordersStore from '../stores/ordersStore';
+import ChartGainData from '../utils/ChartGainData';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -55,7 +56,12 @@ const ChartGainByTime: React.FC = () => {
           />
         </div>
       </MuiToolbar>
-      <ChartGain data={getChartGainByTimeData(selectedDate)} />
+      <ChartGain
+        data={new ChartGainData().getDataByTime(
+          ordersStore.getState(),
+          selectedDate
+        )}
+      />
     </MuiPaper>
   );
 };

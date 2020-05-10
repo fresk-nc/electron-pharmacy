@@ -8,7 +8,8 @@ import MuiTextField from '@material-ui/core/TextField';
 import {DatePicker} from '@material-ui/pickers';
 
 import ChartGain from './ChartGain';
-import getChartGainByDayData from '../utils/getChartGainByDayData';
+import ordersStore from '../stores/ordersStore';
+import ChartGainData from '../utils/ChartGainData';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,7 +39,12 @@ const ChartGainByDay: React.FC = () => {
           />
         </div>
       </MuiToolbar>
-      <ChartGain data={getChartGainByDayData(selectedDate)} />
+      <ChartGain
+        data={new ChartGainData().getDataByDay(
+          ordersStore.getState(),
+          selectedDate
+        )}
+      />
     </MuiPaper>
   );
 };
