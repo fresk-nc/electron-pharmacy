@@ -12,6 +12,8 @@ import MuiTableRow from '@material-ui/core/TableRow';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
 import ordersStore from '../stores/ordersStore';
 import OrderRecord from '../records/OrderRecord';
+import formatCurrency from '../utils/formatCurrency';
+import formatDate from '../utils/formatDate';
 
 import Table from './Table';
 
@@ -32,6 +34,9 @@ const Orders: React.FC = () => {
       {
         title: 'Дата и время',
         field: 'datetime',
+        render: (order) => {
+          return formatDate(new Date(order.datetime), 'Pp');
+        },
       },
       {
         title: 'Номер телефона',
@@ -88,10 +93,7 @@ const Orders: React.FC = () => {
                     <MuiTableRow key={drug.name}>
                       <MuiTableCell>{drug.name}</MuiTableCell>
                       <MuiTableCell align="right">
-                        {new Intl.NumberFormat('ru', {
-                          style: 'currency',
-                          currency: 'RUB',
-                        }).format(drug.price)}
+                        {formatCurrency(drug.price)}
                       </MuiTableCell>
                       <MuiTableCell align="right">{drug.count}</MuiTableCell>
                     </MuiTableRow>

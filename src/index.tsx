@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter} from 'react-router-dom';
 import {ipcRenderer} from 'electron';
+import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
+import {LocalizationProvider} from '@material-ui/pickers';
+import ruLocale from 'date-fns/locale/ru';
 
 import drugsStore from './stores/drugsStore';
 import ordersStore from './stores/ordersStore';
@@ -61,7 +64,9 @@ ipcRenderer.once('bootstrap-success', (_, data) => {
   ReactDOM.render(
     <React.StrictMode>
       <HashRouter>
-        <App />
+        <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
+          <App />
+        </LocalizationProvider>
       </HashRouter>
     </React.StrictMode>,
     document.getElementById('root')

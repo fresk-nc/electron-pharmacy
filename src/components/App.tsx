@@ -30,6 +30,7 @@ import LocalShipping from '@material-ui/icons/LocalShipping';
 import Drugs from './Drugs';
 import Orders from './Orders';
 import PickupPoints from './PickupPoints';
+import Statistics from './Statistics';
 import Snackbar from './Snackbar';
 
 const drawerWidth = 240;
@@ -183,13 +184,13 @@ const App: React.FC = () => {
           </ListItem>
           <ListItem
             button
-            component={(props) => <Link to="/analysis" {...props} />}
-            selected={location.pathname === '/analysis'}
+            component={(props) => <Link to="/statistics" {...props} />}
+            selected={location.pathname === '/statistics'}
           >
             <ListItemIcon>
               <ShowChart />
             </ListItemIcon>
-            <ListItemText primary="Анализ спроса" />
+            <ListItemText primary="Статистика" />
           </ListItem>
         </List>
       </Drawer>
@@ -209,8 +210,8 @@ const App: React.FC = () => {
           <Route path="/pickup-points">
             <PickupPoints />
           </Route>
-          <Route path="/analysis">
-            <Analysis />
+          <Route path="/statistics">
+            <Statistics />
           </Route>
         </Switch>
       </main>
@@ -218,9 +219,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-function Analysis() {
-  return <Typography paragraph>Analysis</Typography>;
-}
 
 export default App;
