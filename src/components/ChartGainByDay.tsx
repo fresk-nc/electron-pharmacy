@@ -9,7 +9,7 @@ import {DatePicker} from '@material-ui/pickers';
 
 import ChartGain from './ChartGain';
 import ordersStore from '../stores/ordersStore';
-import ChartGainData from '../utils/ChartGainData';
+import ChartGainByDayData from '../utils/ChartGainByDayData';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -40,7 +40,7 @@ const ChartGainByDay: React.FC = () => {
         </div>
       </MuiToolbar>
       <ChartGain
-        data={new ChartGainData().getDataByDay(
+        data={new ChartGainByDayData().getData(
           ordersStore.getState(),
           selectedDate
         )}

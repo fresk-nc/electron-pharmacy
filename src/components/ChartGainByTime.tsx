@@ -14,7 +14,7 @@ import {
 
 import ChartGain from './ChartGain';
 import ordersStore from '../stores/ordersStore';
-import ChartGainData from '../utils/ChartGainData';
+import ChartGainByTimeData from '../utils/ChartGainByTimeData';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -57,7 +57,7 @@ const ChartGainByTime: React.FC = () => {
         </div>
       </MuiToolbar>
       <ChartGain
-        data={new ChartGainData().getDataByTime(
+        data={new ChartGainByTimeData().getData(
           ordersStore.getState(),
           selectedDate
         )}
