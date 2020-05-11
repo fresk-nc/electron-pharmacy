@@ -15,6 +15,9 @@ interface PickupPointsStoreInterface {
   delete(name: string): Promise<PickupPointRecord[]>;
 }
 
+/**
+ * OOP pattern - Singleton
+ */
 class PickupPointsStore extends CommonStore
   implements PickupPointsStoreInterface {
   private state: PickupPointRecord[] = [];

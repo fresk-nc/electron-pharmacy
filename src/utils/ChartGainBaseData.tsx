@@ -8,7 +8,7 @@ export type ChartGainDataItem = {
 };
 
 /**
- * Pattern - Template Method
+ * OOP pattern - Template Method
  */
 abstract class ChartGainBaseData {
   protected abstract filterOrderPredicate(

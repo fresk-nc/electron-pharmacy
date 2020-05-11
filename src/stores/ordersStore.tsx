@@ -7,6 +7,9 @@ interface OrdersStoreInterface {
   setState(orders: OrderRecord[]): void;
 }
 
+/**
+ * OOP pattern - Singleton
+ */
 class OrdersStore extends CommonStore implements OrdersStoreInterface {
   private state: OrderRecord[] = [];
   private updateEvent = 'ORDERS_STORE_UPDATED';

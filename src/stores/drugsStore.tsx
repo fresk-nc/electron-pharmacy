@@ -12,6 +12,9 @@ interface DrugsStoreInterface {
   delete(name: string): Promise<DrugRecord[]>;
 }
 
+/**
+ * OOP pattern - Singleton
+ */
 class DrugsStore extends CommonStore implements DrugsStoreInterface {
   private state: DrugRecord[] = [];
   private updateEvent = 'DRUGS_STORE_UPDATED';

@@ -7,7 +7,7 @@ import ChartGainBaseData, {ChartGainDataItem} from './ChartGainBaseData';
 import OrderRecord from '../records/OrderRecord';
 
 /**
- * Pattern - Template Method
+ * OOP pattern - Template Method
  */
 class ChartGainByTimeData extends ChartGainBaseData {
   protected filterOrderPredicate(

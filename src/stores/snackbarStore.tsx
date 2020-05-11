@@ -13,6 +13,9 @@ interface SnackbarStoreInterface {
   setState(state: SnackbarState): void;
 }
 
+/**
+ * OOP pattern - Singleton
+ */
 class SnackbarStore extends CommonStore implements SnackbarStoreInterface {
   private state: SnackbarState = null;
   private updateEvent = 'SNACKBAR_STORE_UPDATED';

@@ -9,7 +9,7 @@ import OrderRecord from '../records/OrderRecord';
 import DateFormatter from './DateFormatter';
 
 /**
- * Pattern - Template Method
+ * OOP pattern - Template Method
  */
 class ChartGainByDayData extends ChartGainBaseData {
   protected filterOrderPredicate(
