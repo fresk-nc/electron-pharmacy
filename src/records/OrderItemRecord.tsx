@@ -9,10 +9,10 @@ class OrderItemRecord implements OrderItemRecordInterface {
   count: number;
   price: number;
 
-  constructor(drug: Pick<OrderItemRecord, 'name' | 'count' | 'price'>) {
-    this.name = drug.name;
-    this.count = drug.count;
-    this.price = drug.price;
+  constructor(orderItem: Pick<OrderItemRecord, 'name' | 'count' | 'price'>) {
+    this.name = orderItem.name;
+    this.count = orderItem.count;
+    this.price = orderItem.price;
   }
 }
 

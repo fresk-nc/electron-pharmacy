@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import MuiSnackbar from '@material-ui/core/Snackbar';
 import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
-import snackbarStore, {SnackbarState} from '../stores/snackbarStore';
+import snackbarStore from '../stores/snackbarStore';
+import NotificationRecord from '../records/NotificationRecord';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
 
 function Alert(props: AlertProps) {
@@ -10,10 +11,12 @@ function Alert(props: AlertProps) {
 }
 
 const Snackbar: React.FC = () => {
-  const [state, setState] = useState<SnackbarState>(snackbarStore.getState());
+  const [state, setState] = useState<NotificationRecord>(
+    snackbarStore.getState()[0]
+  );
 
-  useStoreSubscribe(snackbarStore, (state: SnackbarState) => {
-    setState(state);
+  useStoreSubscribe(snackbarStore, (newState: NotificationRecord[]) => {
+    setState(newState[0]);
   });
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -21,7 +24,7 @@ const Snackbar: React.FC = () => {
       return;
     }
 
-    snackbarStore.setState(null);
+    snackbarStore.removeNotification(state);
   };
 
   if (!state) {
@@ -29,10 +32,8 @@ const Snackbar: React.FC = () => {
   }
 
   return (
-    <MuiSnackbar open autoHideDuration={6000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={state?.type}>
-        {state?.text}
-      </Alert>
+    <MuiSnackbar open autoHideDuration={3000} onClose={handleClose}>
+      <Alert severity={state?.type}>{state?.text}</Alert>
     </MuiSnackbar>
   );
 };

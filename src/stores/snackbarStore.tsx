@@ -1,35 +1,27 @@
-import CommonStore from './CommonStore';
+import CommonStore, {CommonStoreInterface} from './CommonStore';
+import NotificationRecord from '../records/NotificationRecord';
 
-type SnackbarStateType = 'success' | 'error';
-
-export type SnackbarState = {
-  text: string;
-  type: SnackbarStateType;
-} | null;
-
-interface SnackbarStoreInterface {
-  getUpdateEvent(): string;
-  getState(): SnackbarState;
-  setState(state: SnackbarState): void;
+interface SnackbarStoreInterface
+  extends CommonStoreInterface<NotificationRecord[]> {
+  addNotification(notification: NotificationRecord): void;
+  removeNotification(notification: NotificationRecord): void;
 }
 
 /**
  * OOP pattern - Singleton
  */
-class SnackbarStore extends CommonStore implements SnackbarStoreInterface {
-  private state: SnackbarState = null;
-  private updateEvent = 'SNACKBAR_STORE_UPDATED';
+class SnackbarStore extends CommonStore<NotificationRecord[]>
+  implements SnackbarStoreInterface {
+  protected state: NotificationRecord[] = [];
+  protected updateEvent = 'SNACKBAR_STORE_UPDATED';
 
-  getUpdateEvent(): string {
-    return this.updateEvent;
+  addNotification(notification: NotificationRecord): void {
+    this.setState([notification, ...this.state]);
+    this.emit(this.updateEvent, this.state);
   }
 
-  getState(): SnackbarState {
-    return this.state;
-  }
-
-  setState(state: SnackbarState): void {
-    this.state = state;
+  removeNotification(notification: NotificationRecord): void {
+    this.setState(this.state.filter((n) => n !== notification));
     this.emit(this.updateEvent, this.state);
   }
 }

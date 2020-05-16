@@ -12,12 +12,15 @@ class PickupPointRecord implements PickupPointRecordInterface {
   price: number;
 
   constructor(
-    drug: Pick<PickupPointRecord, 'name' | 'address' | 'workTime' | 'price'>
+    pickupPoint: Pick<
+      PickupPointRecord,
+      'name' | 'address' | 'workTime' | 'price'
+    >
   ) {
-    this.name = drug.name;
-    this.address = drug.address;
-    this.workTime = drug.workTime;
-    this.price = drug.price;
+    this.name = pickupPoint.name;
+    this.address = pickupPoint.address;
+    this.workTime = pickupPoint.workTime;
+    this.price = pickupPoint.price;
   }
 }
 

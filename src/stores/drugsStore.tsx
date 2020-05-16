@@ -1,12 +1,9 @@
 import {ipcRenderer} from 'electron';
 
-import CommonStore from './CommonStore';
+import CommonStore, {CommonStoreInterface} from './CommonStore';
 import DrugRecord from '../records/DrugRecord';
 
-interface DrugsStoreInterface {
-  getUpdateEvent(): string;
-  getState(): DrugRecord[];
-  setState(drugs: DrugRecord[]): void;
+interface DrugsStoreInterface extends CommonStoreInterface<DrugRecord[]> {
   insert(drug: DrugRecord): Promise<DrugRecord[]>;
   update(oldDrug: DrugRecord, newDrug: DrugRecord): Promise<DrugRecord[]>;
   delete(name: string): Promise<DrugRecord[]>;
@@ -15,21 +12,10 @@ interface DrugsStoreInterface {
 /**
  * OOP pattern - Singleton
  */
-class DrugsStore extends CommonStore implements DrugsStoreInterface {
-  private state: DrugRecord[] = [];
-  private updateEvent = 'DRUGS_STORE_UPDATED';
-
-  getUpdateEvent(): string {
-    return this.updateEvent;
-  }
-
-  getState(): DrugRecord[] {
-    return this.state;
-  }
-
-  setState(drugs: DrugRecord[]): void {
-    this.state = drugs;
-  }
+class DrugsStore extends CommonStore<DrugRecord[]>
+  implements DrugsStoreInterface {
+  protected state: DrugRecord[] = [];
+  protected updateEvent = 'DRUGS_STORE_UPDATED';
 
   insert(drug: DrugRecord): Promise<DrugRecord[]> {
     return new Promise<DrugRecord[]>((resolve, reject) => {

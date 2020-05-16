@@ -1,12 +1,10 @@
 import {ipcRenderer} from 'electron';
 
-import CommonStore from './CommonStore';
+import CommonStore, {CommonStoreInterface} from './CommonStore';
 import PickupPointRecord from '../records/PickupPointRecord';
 
-interface PickupPointsStoreInterface {
-  getUpdateEvent(): string;
-  getState(): PickupPointRecord[];
-  setState(pickupPoints: PickupPointRecord[]): void;
+interface PickupPointsStoreInterface
+  extends CommonStoreInterface<PickupPointRecord[]> {
   insert(pickupPoint: PickupPointRecord): Promise<PickupPointRecord[]>;
   update(
     oldPickupPoint: PickupPointRecord,
@@ -18,22 +16,10 @@ interface PickupPointsStoreInterface {
 /**
  * OOP pattern - Singleton
  */
-class PickupPointsStore extends CommonStore
+class PickupPointsStore extends CommonStore<PickupPointRecord[]>
   implements PickupPointsStoreInterface {
-  private state: PickupPointRecord[] = [];
-  private updateEvent = 'PICKUP_POINTS_STORE_UPDATED';
-
-  getUpdateEvent(): string {
-    return this.updateEvent;
-  }
-
-  getState(): PickupPointRecord[] {
-    return this.state;
-  }
-
-  setState(pickupPoints: PickupPointRecord[]): void {
-    this.state = pickupPoints;
-  }
+  protected state: PickupPointRecord[] = [];
+  protected updateEvent = 'PICKUP_POINTS_STORE_UPDATED';
 
   insert(pickupPoint: PickupPointRecord): Promise<PickupPointRecord[]> {
     return new Promise<PickupPointRecord[]>((resolve, reject) => {

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Column} from 'material-table';
 
 import DrugRecord from '../records/DrugRecord';
+import NotificationRecord from '../records/NotificationRecord';
 import drugsStore from '../stores/drugsStore';
 import snackbarStore from '../stores/snackbarStore';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
@@ -79,16 +80,20 @@ const Drugs: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },
@@ -113,16 +118,20 @@ const Drugs: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },
@@ -130,16 +139,20 @@ const Drugs: React.FC = () => {
           return drugsStore
             .delete(oldData.name)
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },

@@ -5,6 +5,7 @@ import useStoreSubscribe from '../hooks/useStoreSubscribe';
 import snackbarStore from '../stores/snackbarStore';
 import pickupPointsStore from '../stores/pickupPointsStore';
 import PickupPointRecord from '../records/PickupPointRecord';
+import NotificationRecord from '../records/NotificationRecord';
 import Table from './Table';
 import TableEditRow from './TableEditRow';
 import TableEditField from './TableEditField';
@@ -81,16 +82,20 @@ const PickupPoints: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },
@@ -115,16 +120,20 @@ const PickupPoints: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },
@@ -132,16 +141,20 @@ const PickupPoints: React.FC = () => {
           return pickupPointsStore
             .delete(oldData.address)
             .then(() => {
-              snackbarStore.setState({
-                text: 'Операция выполнена успешно!',
-                type: 'success',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
             })
             .catch((error) => {
-              snackbarStore.setState({
-                text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
-                type: 'error',
-              });
+              snackbarStore.addNotification(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
               return Promise.reject(error);
             });
         },
