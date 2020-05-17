@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Column} from 'material-table';
 
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
-import snackbarStore from '../stores/snackbarStore';
+import notificationsStore from '../stores/notificationsStore';
 import pickupPointsStore from '../stores/pickupPointsStore';
 import PickupPointRecord from '../records/PickupPointRecord';
 import NotificationRecord from '../records/NotificationRecord';
@@ -82,7 +82,7 @@ const PickupPoints: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -90,7 +90,7 @@ const PickupPoints: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',
@@ -120,7 +120,7 @@ const PickupPoints: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -128,7 +128,7 @@ const PickupPoints: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',
@@ -141,7 +141,7 @@ const PickupPoints: React.FC = () => {
           return pickupPointsStore
             .delete(oldData.address)
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -149,7 +149,7 @@ const PickupPoints: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',

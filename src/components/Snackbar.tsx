@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import MuiSnackbar from '@material-ui/core/Snackbar';
 import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
-import snackbarStore from '../stores/snackbarStore';
+import notificationsStore from '../stores/notificationsStore';
 import NotificationRecord from '../records/NotificationRecord';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
 
@@ -12,10 +12,10 @@ function Alert(props: AlertProps) {
 
 const Snackbar: React.FC = () => {
   const [state, setState] = useState<NotificationRecord>(
-    snackbarStore.getState()[0]
+    notificationsStore.getState()[0]
   );
 
-  useStoreSubscribe(snackbarStore, (newState: NotificationRecord[]) => {
+  useStoreSubscribe(notificationsStore, (newState: NotificationRecord[]) => {
     setState(newState[0]);
   });
 
@@ -24,7 +24,7 @@ const Snackbar: React.FC = () => {
       return;
     }
 
-    snackbarStore.removeNotification(state);
+    notificationsStore.delete(state);
   };
 
   if (!state) {

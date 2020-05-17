@@ -1,29 +1,29 @@
 import CommonStore, {CommonStoreInterface} from './CommonStore';
 import NotificationRecord from '../records/NotificationRecord';
 
-interface SnackbarStoreInterface
+interface NotificationsStoreInterface
   extends CommonStoreInterface<NotificationRecord[]> {
-  addNotification(notification: NotificationRecord): void;
-  removeNotification(notification: NotificationRecord): void;
+  insert(notification: NotificationRecord): void;
+  delete(notification: NotificationRecord): void;
 }
 
 /**
  * OOP pattern - Singleton
  */
-class SnackbarStore extends CommonStore<NotificationRecord[]>
-  implements SnackbarStoreInterface {
+class NotificationsStore extends CommonStore<NotificationRecord[]>
+  implements NotificationsStoreInterface {
   protected state: NotificationRecord[] = [];
-  protected updateEvent = 'SNACKBAR_STORE_UPDATED';
+  protected updateEvent = 'NOTIFICATIONS_STORE_UPDATED';
 
-  addNotification(notification: NotificationRecord): void {
+  insert(notification: NotificationRecord): void {
     this.setState([notification, ...this.state]);
     this.emit(this.updateEvent, this.state);
   }
 
-  removeNotification(notification: NotificationRecord): void {
+  delete(notification: NotificationRecord): void {
     this.setState(this.state.filter((n) => n !== notification));
     this.emit(this.updateEvent, this.state);
   }
 }
 
-export default new SnackbarStore();
+export default new NotificationsStore();

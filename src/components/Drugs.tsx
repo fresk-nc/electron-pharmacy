@@ -4,7 +4,7 @@ import {Column} from 'material-table';
 import DrugRecord from '../records/DrugRecord';
 import NotificationRecord from '../records/NotificationRecord';
 import drugsStore from '../stores/drugsStore';
-import snackbarStore from '../stores/snackbarStore';
+import notificationsStore from '../stores/notificationsStore';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
 import DrugValidationSchema from '../validations/DrugValidationSchema';
 import Table from './Table';
@@ -80,7 +80,7 @@ const Drugs: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -88,7 +88,7 @@ const Drugs: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',
@@ -118,7 +118,7 @@ const Drugs: React.FC = () => {
               })
             )
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -126,7 +126,7 @@ const Drugs: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',
@@ -139,7 +139,7 @@ const Drugs: React.FC = () => {
           return drugsStore
             .delete(oldData.name)
             .then(() => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Операция выполнена успешно!',
                   type: 'success',
@@ -147,7 +147,7 @@ const Drugs: React.FC = () => {
               );
             })
             .catch((error) => {
-              snackbarStore.addNotification(
+              notificationsStore.insert(
                 new NotificationRecord({
                   text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
                   type: 'error',
