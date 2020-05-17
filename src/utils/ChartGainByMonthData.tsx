@@ -8,14 +8,16 @@ import OrderRecord from '../records/OrderRecord';
  * OOP pattern - Template Method
  */
 class ChartGainByMonthData extends ChartGainBaseData {
-  protected filterOrderPredicate(
-    order: OrderRecord,
+  protected getOrdersByPeriod(
+    orders: OrderRecord[],
     selectedDate: Date
-  ): boolean {
-    return isSameYear(new Date(order.datetime), selectedDate);
+  ): OrderRecord[] {
+    return orders.filter((order) => {
+      return isSameYear(new Date(order.datetime), selectedDate);
+    });
   }
 
-  protected generateTemplateData(): ReadonlyArray<ChartGainDataItem> {
+  protected getInitialData(): ReadonlyArray<ChartGainDataItem> {
     return [
       {name: 'Январь', value: 0},
       {name: 'Февраль', value: 0},
@@ -32,8 +34,13 @@ class ChartGainByMonthData extends ChartGainBaseData {
     ];
   }
 
-  protected findDataItemPredicate(order: OrderRecord, index: number): boolean {
-    return index === getMonth(new Date(order.datetime));
+  protected findDataItemForOrder(
+    data: ReadonlyArray<ChartGainDataItem>,
+    order: OrderRecord
+  ): ChartGainDataItem | undefined {
+    return data.find((_, index) => {
+      return index === getMonth(new Date(order.datetime));
+    });
   }
 }
 

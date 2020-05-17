@@ -12,14 +12,16 @@ import DateFormatter from './DateFormatter';
  * OOP pattern - Template Method
  */
 class ChartGainByDayData extends ChartGainBaseData {
-  protected filterOrderPredicate(
-    order: OrderRecord,
+  protected getOrdersByPeriod(
+    orders: OrderRecord[],
     selectedDate: Date
-  ): boolean {
-    return isSameMonth(new Date(order.datetime), selectedDate);
+  ): OrderRecord[] {
+    return orders.filter((order) => {
+      return isSameMonth(new Date(order.datetime), selectedDate);
+    });
   }
 
-  protected generateTemplateData(
+  protected getInitialData(
     selectedDate: Date
   ): ReadonlyArray<ChartGainDataItem> {
     return eachDayOfInterval({
@@ -33,8 +35,13 @@ class ChartGainByDayData extends ChartGainBaseData {
     });
   }
 
-  protected findDataItemPredicate(order: OrderRecord, index: number): boolean {
-    return index + 1 === getDate(new Date(order.datetime));
+  protected findDataItemForOrder(
+    data: ReadonlyArray<ChartGainDataItem>,
+    order: OrderRecord
+  ): ChartGainDataItem | undefined {
+    return data.find((_, index) => {
+      return index + 1 === getDate(new Date(order.datetime));
+    });
   }
 }
 

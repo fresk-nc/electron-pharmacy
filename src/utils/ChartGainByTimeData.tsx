@@ -10,21 +10,23 @@ import OrderRecord from '../records/OrderRecord';
  * OOP pattern - Template Method
  */
 class ChartGainByTimeData extends ChartGainBaseData {
-  protected filterOrderPredicate(
-    order: OrderRecord,
+  protected getOrdersByPeriod(
+    orders: OrderRecord[],
     selectedDate: DateRange
-  ): boolean {
-    return (
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      isAfter(new Date(order.datetime), selectedDate[0]) &&
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      isBefore(new Date(order.datetime), selectedDate[1])
-    );
+  ): OrderRecord[] {
+    return orders.filter((order) => {
+      return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        isAfter(new Date(order.datetime), selectedDate[0]) &&
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        isBefore(new Date(order.datetime), selectedDate[1])
+      );
+    });
   }
 
-  protected generateTemplateData(): ReadonlyArray<ChartGainDataItem> {
+  protected getInitialData(): ReadonlyArray<ChartGainDataItem> {
     return [
       {name: '00-01', value: 0},
       {name: '01-02', value: 0},
@@ -52,8 +54,13 @@ class ChartGainByTimeData extends ChartGainBaseData {
     ];
   }
 
-  protected findDataItemPredicate(order: OrderRecord, index: number): boolean {
-    return index === getHours(new Date(order.datetime));
+  protected findDataItemForOrder(
+    data: ReadonlyArray<ChartGainDataItem>,
+    order: OrderRecord
+  ): ChartGainDataItem | undefined {
+    return data.find((_, index) => {
+      return index === getHours(new Date(order.datetime));
+    });
   }
 }
 

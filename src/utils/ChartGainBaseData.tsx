@@ -11,34 +11,29 @@ export type ChartGainDataItem = {
  * OOP pattern - Template Method
  */
 abstract class ChartGainBaseData {
-  protected abstract filterOrderPredicate(
-    order: OrderRecord,
+  protected abstract getOrdersByPeriod(
+    orders: OrderRecord[],
     selectedDate: Date | DateRange
-  ): boolean;
+  ): OrderRecord[];
 
-  protected abstract generateTemplateData(
+  protected abstract getInitialData(
     selectedDate: Date | DateRange
   ): ReadonlyArray<ChartGainDataItem>;
 
-  protected abstract findDataItemPredicate(
-    order: OrderRecord,
-    index: number
-  ): boolean;
+  protected abstract findDataItemForOrder(
+    data: ReadonlyArray<ChartGainDataItem>,
+    order: OrderRecord
+  ): ChartGainDataItem | undefined;
 
   getData(
     orders: OrderRecord[],
     selectedDate: Date | DateRange
   ): ReadonlyArray<ChartGainDataItem> {
-    const ordersByPeriod = orders.filter((order: OrderRecord) =>
-      this.filterOrderPredicate(order, selectedDate)
-    );
-    const data = this.generateTemplateData(selectedDate);
+    const ordersByPeriod = this.getOrdersByPeriod(orders, selectedDate);
+    const data = this.getInitialData(selectedDate);
 
     ordersByPeriod.forEach((order) => {
-      const item = data.find((_, index: number) =>
-        this.findDataItemPredicate(order, index)
-      );
-
+      const item = this.findDataItemForOrder(data, order);
       item!.value += order.totalPrice;
     });
 
