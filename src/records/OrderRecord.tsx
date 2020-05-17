@@ -1,23 +1,23 @@
 import OrderItemRecord from './OrderItemRecord';
 
 interface OrderRecordInterface {
-  id: number;
-  datetime: string;
-  totalPrice: number;
-  status: string;
-  phone: string;
-  address: string;
-  drugs: OrderItemRecord[];
+  readonly id: number;
+  readonly datetime: string;
+  readonly totalPrice: number;
+  readonly status: string;
+  readonly phone: string;
+  readonly address: string;
+  readonly drugs: OrderItemRecord[];
 }
 
 class OrderRecord implements OrderRecordInterface {
-  id: number;
-  datetime: string;
-  totalPrice: number;
-  status: string;
-  phone: string;
-  address: string;
-  drugs: OrderItemRecord[];
+  readonly id: number;
+  readonly datetime: string;
+  readonly totalPrice: number;
+  readonly status: string;
+  readonly phone: string;
+  readonly address: string;
+  readonly drugs: OrderItemRecord[];
 
   constructor(
     order: Pick<

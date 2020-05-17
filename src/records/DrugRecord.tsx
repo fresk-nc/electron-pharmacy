@@ -1,15 +1,15 @@
 interface DrugRecordInterface {
-  name: string;
-  description: string;
-  count: number;
-  price: number;
+  readonly name: string;
+  readonly description: string;
+  readonly count: number;
+  readonly price: number;
 }
 
 class DrugRecord implements DrugRecordInterface {
-  name: string;
-  description: string;
-  count: number;
-  price: number;
+  readonly name: string;
+  readonly description: string;
+  readonly count: number;
+  readonly price: number;
 
   constructor(
     drug: Pick<DrugRecord, 'name' | 'description' | 'count' | 'price'>

@@ -1,13 +1,13 @@
 interface OrderItemRecordInterface {
-  name: string;
-  count: number;
-  price: number;
+  readonly name: string;
+  readonly count: number;
+  readonly price: number;
 }
 
 class OrderItemRecord implements OrderItemRecordInterface {
-  name: string;
-  count: number;
-  price: number;
+  readonly name: string;
+  readonly count: number;
+  readonly price: number;
 
   constructor(orderItem: Pick<OrderItemRecord, 'name' | 'count' | 'price'>) {
     this.name = orderItem.name;

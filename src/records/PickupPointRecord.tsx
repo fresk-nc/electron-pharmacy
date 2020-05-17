@@ -1,15 +1,15 @@
 interface PickupPointRecordInterface {
-  name: string;
-  address: string;
-  workTime: string;
-  price: number;
+  readonly name: string;
+  readonly address: string;
+  readonly workTime: string;
+  readonly price: number;
 }
 
 class PickupPointRecord implements PickupPointRecordInterface {
-  name: string;
-  address: string;
-  workTime: string;
-  price: number;
+  readonly name: string;
+  readonly address: string;
+  readonly workTime: string;
+  readonly price: number;
 
   constructor(
     pickupPoint: Pick<
