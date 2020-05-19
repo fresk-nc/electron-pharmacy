@@ -10,7 +10,7 @@ let mainWindow;
 const knex = require('knex')({
   client: 'sqlite3',
   connection: {
-    filename: path.join(__dirname, '../pharmacy.db'),
+    filename: path.join(__dirname, './pharmacy.db'),
   },
 });
 
@@ -47,7 +47,7 @@ function createWindow() {
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      : `file://${path.join(__dirname, './index.html')}`
   );
   if (isDev) {
     // Open the DevTools.
