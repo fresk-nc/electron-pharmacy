@@ -1,26 +1,26 @@
 interface PickupPointRecordInterface {
-  readonly name: string;
+  readonly pharmacyName: string;
   readonly address: string;
   readonly workTime: string;
-  readonly price: number;
+  readonly deliveryPrice: number;
 }
 
 class PickupPointRecord implements PickupPointRecordInterface {
-  readonly name: string;
+  readonly pharmacyName: string;
   readonly address: string;
   readonly workTime: string;
-  readonly price: number;
+  readonly deliveryPrice: number;
 
   constructor(
     pickupPoint: Pick<
       PickupPointRecord,
-      'name' | 'address' | 'workTime' | 'price'
+      'pharmacyName' | 'address' | 'workTime' | 'deliveryPrice'
     >
   ) {
-    this.name = pickupPoint.name;
+    this.pharmacyName = pickupPoint.pharmacyName;
     this.address = pickupPoint.address;
     this.workTime = pickupPoint.workTime;
-    this.price = pickupPoint.price;
+    this.deliveryPrice = pickupPoint.deliveryPrice;
   }
 }
 

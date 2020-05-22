@@ -20,10 +20,9 @@ function formatOrders(orders) {
       output[order.id] = output[order.id] || {
         id: order.id,
         datetime: order.datetime,
-        totalPrice: order.totalPrice,
         status: order.status,
         phone: order.phone,
-        address: order.address,
+        pickupPoint: order.pickupPoint,
         drugs: [],
       };
       output[order.id].drugs.push({
@@ -107,6 +106,55 @@ app.on('ready', () => {
       .catch((error) => {
         console.log(error);
         event.reply('drugs-table-delete-failure');
+      });
+  });
+  ipcMain.on('orders-table-insert', (event, data) => {
+    knex
+      .insert({
+        id: data.id,
+        phone: data.phone,
+        datetime: data.datetime,
+        status: data.status,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        pickup_point: data.pickupPoint,
+      })
+      .into('orders')
+      .then(() => {
+        return knex
+          .insert(
+            data.drugs.map((drug) => {
+              return snakecaseKeys({
+                orderId: data.id,
+                name: drug.name,
+                price: drug.price,
+                count: drug.count,
+              });
+            })
+          )
+          .into('order_item');
+      })
+      .then(() => {
+        event.reply('orders-table-insert-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        event.reply('orders-table-insert-failure');
+      });
+  });
+  ipcMain.on('orders-table-delete', (event, id) => {
+    knex('order_item')
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      .where({order_id: id})
+      .del()
+      .then(() => {
+        return knex('orders').where({id}).del();
+      })
+      .then(() => {
+        event.reply('orders-table-delete-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        event.reply('orders-table-delete-failure');
       });
   });
   ipcMain.on('pickup_points-table-insert', (event, data) => {

@@ -9,13 +9,16 @@ import MuiTableCell from '@material-ui/core/TableCell';
 import MuiTableHead from '@material-ui/core/TableHead';
 import MuiTableRow from '@material-ui/core/TableRow';
 
+import Table from './Table';
 import useStoreSubscribe from '../hooks/useStoreSubscribe';
 import ordersStore from '../stores/ordersStore';
+import pickupPointsStore from '../stores/pickupPointsStore';
 import OrderRecord from '../records/OrderRecord';
+import PickupPointRecord from '../records/PickupPointRecord';
 import CurrencyFormatter from '../utils/CurrencyFormatter';
 import DateFormatter from '../utils/DateFormatter';
-
-import Table from './Table';
+import notificationsStore from '../stores/notificationsStore';
+import NotificationRecord from '../records/NotificationRecord';
 
 type Row = OrderRecord;
 
@@ -25,6 +28,9 @@ interface TableState {
 }
 
 const Orders: React.FC = () => {
+  const [pickupPointState, setPickupPointsState] = useState<
+    PickupPointRecord[]
+  >(pickupPointsStore.getState());
   const [state, setState] = useState<TableState>({
     columns: [
       {
@@ -33,7 +39,6 @@ const Orders: React.FC = () => {
       },
       {
         title: 'Дата и время',
-        field: 'datetime',
         render: (order) => {
           return new DateFormatter(new Date(order.datetime)).format('Pp');
         },
@@ -44,15 +49,28 @@ const Orders: React.FC = () => {
       },
       {
         title: 'Адрес доставки',
-        field: 'address',
+        render: (order) => {
+          const pickupPoint = pickupPointState.find(
+            ({address}) => address === order.pickupPoint
+          );
+
+          if (pickupPoint) {
+            return `${pickupPoint.pharmacyName}, ${pickupPoint.address}`;
+          }
+
+          return '-';
+        },
       },
       {
-        title: 'Стоимость',
-        field: 'totalPrice',
-        type: 'currency',
-        currencySetting: {
-          locale: 'ru',
-          currencyCode: 'RUB',
+        title: 'Стоимость доставки',
+        render: (order) => {
+          return new CurrencyFormatter(order.getDeliveryPrice()).format();
+        },
+      },
+      {
+        title: 'Итоговая стоимость',
+        render: (order) => {
+          return new CurrencyFormatter(order.getTotalPrice()).format();
         },
       },
       {
@@ -68,11 +86,36 @@ const Orders: React.FC = () => {
       return {...prevSate, data: orders};
     });
   });
+  useStoreSubscribe(pickupPointsStore, setPickupPointsState);
+
   return (
     <Table
       columns={state.columns}
       data={state.data}
       title="Заказы"
+      editable={{
+        onRowDelete: (oldData) => {
+          return ordersStore
+            .delete(oldData.id)
+            .then(() => {
+              notificationsStore.insert(
+                new NotificationRecord({
+                  text: 'Операция выполнена успешно!',
+                  type: 'success',
+                })
+              );
+            })
+            .catch((error) => {
+              notificationsStore.insert(
+                new NotificationRecord({
+                  text: 'Упс, что-то пошло не так, попробуйте ещё раз!',
+                  type: 'error',
+                })
+              );
+              return Promise.reject(error);
+            });
+        },
+      }}
       detailPanel={(rowData) => {
         return (
           <MuiBox margin={3}>

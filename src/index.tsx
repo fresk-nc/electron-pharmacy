@@ -35,28 +35,20 @@ ipcRenderer.once('bootstrap-success', (_, data) => {
         new OrderRecord({
           id: order.id,
           datetime: order.datetime,
-          totalPrice: order.totalPrice,
           status: order.status,
           phone: order.phone,
-          address: order.address,
-          drugs: order.drugs.map(
-            (drug: any) =>
-              new OrderItemRecord({
-                name: drug.name,
-                count: drug.count,
-                price: drug.price,
-              })
-          ),
+          pickupPoint: order.pickupPoint,
+          drugs: order.drugs.map((drug: any) => new OrderItemRecord(drug)),
         })
     )
   );
   pickupPointsStore.setState(
     data.pickupPoints.map((pickupPoint: any) => {
       return new PickupPointRecord({
-        name: pickupPoint.name,
+        pharmacyName: pickupPoint.pharmacyName,
         address: pickupPoint.address,
         workTime: pickupPoint.workTime,
-        price: pickupPoint.price,
+        deliveryPrice: pickupPoint.deliveryPrice,
       });
     })
   );

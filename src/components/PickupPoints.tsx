@@ -23,7 +23,7 @@ const PickupPoints: React.FC = () => {
     columns: [
       {
         title: 'Название',
-        field: 'name',
+        field: 'pharmacyName',
         initialEditValue: '',
       },
       {
@@ -38,7 +38,7 @@ const PickupPoints: React.FC = () => {
       },
       {
         title: 'Стоимость доставки',
-        field: 'price',
+        field: 'deliveryPrice',
         type: 'currency',
         currencySetting: {
           locale: 'ru',
@@ -75,10 +75,10 @@ const PickupPoints: React.FC = () => {
           return pickupPointsStore
             .insert(
               new PickupPointRecord({
-                name: newData.name,
+                pharmacyName: newData.pharmacyName,
                 address: newData.address,
                 workTime: newData.workTime,
-                price: newData.price,
+                deliveryPrice: newData.deliveryPrice,
               })
             )
             .then(() => {
@@ -107,16 +107,16 @@ const PickupPoints: React.FC = () => {
           return pickupPointsStore
             .update(
               new PickupPointRecord({
-                name: oldData.name,
+                pharmacyName: oldData.pharmacyName,
                 address: oldData.address,
                 workTime: oldData.workTime,
-                price: oldData.price,
+                deliveryPrice: oldData.deliveryPrice,
               }),
               new PickupPointRecord({
-                name: newData.name,
+                pharmacyName: newData.pharmacyName,
                 address: newData.address,
                 workTime: newData.workTime,
-                price: newData.price,
+                deliveryPrice: newData.deliveryPrice,
               })
             )
             .then(() => {

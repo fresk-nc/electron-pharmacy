@@ -34,7 +34,7 @@ abstract class ChartGainBaseData {
 
     ordersByPeriod.forEach((order) => {
       const item = this.findDataItemForOrder(data, order);
-      item!.value += order.totalPrice;
+      item!.value += order.getTotalPrice();
     });
 
     return data;

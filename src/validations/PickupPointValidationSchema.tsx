@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const PickupPointValidationSchema = Yup.object().shape({
-  name: Yup.string()
+  pharmacyName: Yup.string()
     .min(2, 'Too Short!')
     .max(140, 'Too Long!')
     .required('Required'),
@@ -13,7 +13,7 @@ const PickupPointValidationSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(140, 'Too Long!')
     .required('Required'),
-  price: Yup.number().min(0, 'Negative!').required('Required'),
+  deliveryPrice: Yup.number().min(0, 'Negative!').required('Required'),
 });
 
 export default PickupPointValidationSchema;

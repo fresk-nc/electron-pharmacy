@@ -26,8 +26,10 @@ import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import ShowChart from '@material-ui/icons/ShowChart';
 import AddBox from '@material-ui/icons/AddBox';
 import LocalShipping from '@material-ui/icons/LocalShipping';
+import AllInboxIcon from '@material-ui/icons/AllInbox';
 
 import Drugs from './Drugs';
+import NewOrder from './NewOrder';
 import Orders from './Orders';
 import PickupPoints from './PickupPoints';
 import Statistics from './Statistics';
@@ -164,11 +166,21 @@ const App: React.FC = () => {
           </ListItem>
           <ListItem
             button
+            component={(props) => <Link to="/new-order" {...props} />}
+            selected={location.pathname === '/new-order'}
+          >
+            <ListItemIcon>
+              <ShoppingCart />
+            </ListItemIcon>
+            <ListItemText primary="Создание заказа" />
+          </ListItem>
+          <ListItem
+            button
             component={(props) => <Link to="/orders" {...props} />}
             selected={location.pathname === '/orders'}
           >
             <ListItemIcon>
-              <ShoppingCart />
+              <AllInboxIcon />
             </ListItemIcon>
             <ListItemText primary="Заказы" />
           </ListItem>
@@ -203,6 +215,9 @@ const App: React.FC = () => {
         <Switch>
           <Route path="/" exact>
             <Drugs />
+          </Route>
+          <Route path="/new-order">
+            <NewOrder />
           </Route>
           <Route path="/orders">
             <Orders />
