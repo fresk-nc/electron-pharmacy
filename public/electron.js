@@ -10,7 +10,7 @@ let mainWindow;
 const knex = require('knex')({
   client: 'sqlite3',
   connection: {
-    filename: path.join(__dirname, './pharmacy.db'),
+    filename: path.join(__dirname, '../pharmacy.db'),
   },
 });
 
