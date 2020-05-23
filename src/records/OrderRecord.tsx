@@ -12,6 +12,7 @@ interface OrderRecordInterface {
   addItem(item: OrderItemRecord): void;
   removeItem(item: OrderItemRecord): void;
   updateItem(oldItem: OrderItemRecord, newItem: OrderItemRecord): void;
+  isInOurWarehouse(): boolean;
 }
 
 class OrderRecord implements OrderRecordInterface {
@@ -65,6 +66,10 @@ class OrderRecord implements OrderRecordInterface {
     newDrugs[index] = newItem;
 
     this.drugs = newDrugs;
+  }
+
+  isInOurWarehouse(): boolean {
+    return this.status !== 'Завершен' && this.status !== 'Доставлен';
   }
 }
 

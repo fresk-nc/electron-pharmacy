@@ -127,29 +127,13 @@ const NewOrder: React.FC = () => {
     ordersStore
       .insert(orderState)
       .then(() => {
-        orderState.drugs.forEach((drug) => {
-          const drugFromStore = drugsState.find(({name}) => drug.name === name);
-
-          if (!drugFromStore) {
-            return;
-          }
-
-          drugsStore.update(
-            drugFromStore,
-            new DrugRecord({
-              ...drugFromStore,
-              count: drugFromStore.count - drug.count,
-            })
-          );
-        });
-
         notificationsStore.insert(
           new NotificationRecord({
             text: 'Операция выполнена успешно!',
             type: 'success',
           })
         );
-
+        drugsStore.reduceDrugsCount(orderState);
         history.push('/orders');
       })
       .catch((error) => {

@@ -2,11 +2,14 @@ import {ipcRenderer} from 'electron';
 
 import CommonStore, {CommonStoreInterface} from './CommonStore';
 import DrugRecord from '../records/DrugRecord';
+import OrderRecord from '../records/OrderRecord';
 
 interface DrugsStoreInterface extends CommonStoreInterface<DrugRecord[]> {
   insert(drug: DrugRecord): Promise<DrugRecord[]>;
   update(oldDrug: DrugRecord, newDrug: DrugRecord): Promise<DrugRecord[]>;
   delete(name: string): Promise<DrugRecord[]>;
+  addDrugsCount(order: OrderRecord): void;
+  reduceDrugsCount(order: OrderRecord): void;
 }
 
 /**
@@ -59,6 +62,36 @@ class DrugsStore extends CommonStore<DrugRecord[]>
       });
       ipcRenderer.once('drugs-table-delete-failure', reject);
     });
+  }
+
+  addDrugsCount(order: OrderRecord): void {
+    if (order.isInOurWarehouse()) {
+      order.drugs.forEach((drug) => {
+        this.changeDrugCount(drug.name, drug.count);
+      });
+    }
+  }
+
+  reduceDrugsCount(order: OrderRecord): void {
+    if (order.isInOurWarehouse()) {
+      order.drugs.forEach((drug) => {
+        this.changeDrugCount(drug.name, -drug.count);
+      });
+    }
+  }
+
+  private changeDrugCount(drugName: string, drugCount: number): void {
+    const drugFromStore = this.state.find((drug) => drug.name === drugName);
+
+    if (drugFromStore) {
+      this.update(
+        drugFromStore,
+        new DrugRecord({
+          ...drugFromStore,
+          count: drugFromStore.count + drugCount,
+        })
+      );
+    }
   }
 }
 

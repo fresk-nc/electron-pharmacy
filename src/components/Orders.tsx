@@ -19,6 +19,7 @@ import CurrencyFormatter from '../utils/CurrencyFormatter';
 import DateFormatter from '../utils/DateFormatter';
 import notificationsStore from '../stores/notificationsStore';
 import NotificationRecord from '../records/NotificationRecord';
+import drugsStore from '../stores/drugsStore';
 
 type Row = OrderRecord;
 
@@ -104,6 +105,7 @@ const Orders: React.FC = () => {
                   type: 'success',
                 })
               );
+              drugsStore.addDrugsCount(oldData);
             })
             .catch((error) => {
               notificationsStore.insert(
